@@ -10,8 +10,10 @@ const addNote = (title, body) => {
   const notes = loadNotes();
 
   //check for title exists or not
-  const duplicateNotes = notes.filter((note) => note.title === title);
-  if (duplicateNotes.length > 0) {
+  //const duplicateNotes = notes.filter((note) => note.title === title);
+  const duplicateNote = notes.find((note) => note.title === title); //Better performance
+
+  if (duplicateNote) {
     console.log(
       chalk.yellow.bold('Title already exists. Please choose unique title')
     );
