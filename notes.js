@@ -41,7 +41,8 @@ const removeNote = (title) => {
   if (note.length > 0) {
     //Remove note
     try {
-      const index = notes.indexOf(note);
+      const index = notes.indexOf(note[0]);
+      console.log('index: ', index);
       const deletedNote = notes.splice(index, 1);
       saveNotes(notes);
       console.log(chalk.green('Note removed successfully! - '), deletedNote);
