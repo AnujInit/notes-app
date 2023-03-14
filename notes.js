@@ -1,11 +1,11 @@
 const fs = require('fs');
 const chalk = require('chalk');
 
-const getNotes = function () {
+const getNotes = () => {
   return 'Your Notes...';
 };
 
-const addNote = function (title, body) {
+const addNote = (title, body) => {
   //load notes from file
   const notes = loadNotes();
 
@@ -31,7 +31,38 @@ const addNote = function (title, body) {
   }
 };
 
-const loadNotes = function () {
+const removeNote = (title) => {
+  //load notes from file
+  const notes = loadNotes();
+
+  //check for title exists or not
+  const note = notes.filter((note) => note.title === title);
+
+  if (note.length > 0) {
+    //Remove note
+    try {
+      const index = notes.indexOf(note);
+      const deletedNote = notes.splice(index, 1);
+      saveNotes(notes);
+      console.log(chalk.green('Note removed successfully! - '), deletedNote);
+    } catch (error) {
+      console.log(chalk.red.inverse.bold('Problem to remove note'));
+    }
+  } else {
+    // display message could not find note
+    console.log(chalk.yellow.bold(`Note is not exist with title "${title}".`));
+  }
+};
+
+const listNotes = () => {
+  console.log(chalk.inverse('Your notes'));
+  const notes = loadNotes();
+  notes.forEach((note, index) => {
+    console.log(`  ${index + 1} - ${note.title}`);
+  });
+};
+
+const loadNotes = () => {
   try {
     const dataBuffer = fs.readFileSync('notes.json');
     const dataJSON = dataBuffer.toString();
@@ -42,7 +73,7 @@ const loadNotes = function () {
   }
 };
 
-const saveNotes = function (notes) {
+const saveNotes = (notes) => {
   const dataJSON = JSON.stringify(notes);
   fs.writeFileSync('notes.json', dataJSON);
 };
@@ -50,4 +81,6 @@ const saveNotes = function (notes) {
 module.exports = {
   getNotes: getNotes,
   addNote: addNote,
+  removeNote: removeNote,
+  listNotes: listNotes,
 };
