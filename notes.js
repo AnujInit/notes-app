@@ -1,10 +1,30 @@
 const fs = require('fs');
 const chalk = require('chalk');
 
-const getNotes = () => {
-  return 'Your Notes...';
+/**
+ * Read Note from file
+ * @param {*} title
+ */
+const readNote = (title) => {
+  //load notes from file
+  const notes = loadNotes();
+
+  //find note
+  const note = notes.find((note) => note.title === title);
+  if (note) {
+    console.log(chalk.inverse(note.title));
+    console.log(` - ${note.body}`);
+  } else {
+    console.log(chalk.yellow.bold('No Note found with title : ', title));
+  }
 };
 
+/**
+ * Add Note to the file
+ * @param {*} title
+ * @param {*} body
+ * @returns
+ */
 const addNote = (title, body) => {
   //load notes from file
   const notes = loadNotes();
@@ -33,6 +53,10 @@ const addNote = (title, body) => {
   }
 };
 
+/**
+ * Remove note from file
+ * @param {*} title
+ */
 const removeNote = (title) => {
   //load notes from file
   const notes = loadNotes();
@@ -57,6 +81,9 @@ const removeNote = (title) => {
   }
 };
 
+/**
+ * List All Notes
+ */
 const listNotes = () => {
   console.log(chalk.inverse('Your notes'));
   const notes = loadNotes();
@@ -65,6 +92,10 @@ const listNotes = () => {
   });
 };
 
+/**
+ * Fetch All Notes from file
+ * @returns notes
+ */
 const loadNotes = () => {
   try {
     const dataBuffer = fs.readFileSync('notes.json');
@@ -76,13 +107,17 @@ const loadNotes = () => {
   }
 };
 
+/**
+ * save all notes in file
+ * @param {} notes
+ */
 const saveNotes = (notes) => {
   const dataJSON = JSON.stringify(notes);
   fs.writeFileSync('notes.json', dataJSON);
 };
 
 module.exports = {
-  getNotes: getNotes,
+  readNote: readNote,
   addNote: addNote,
   removeNote: removeNote,
   listNotes: listNotes,
